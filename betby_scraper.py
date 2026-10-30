@@ -36,7 +36,12 @@ S = requests.Session(); S.headers.update({"User-Agent": UA, "Accept": "applicati
 
 def log(*a): print("[betby]", *a, file=sys.stderr, flush=True)
 def get(path: str) -> Any:
-    r = S.get(API + path, timeout=25); r.raise_for_status(); return r.json()
+    import time
+    for i in range(4):                     # 503 / 429 passagers : on réessaie (5 s, 15 s, 30 s)
+        r = S.get(API + path, timeout=25)
+        if r.status_code not in (429, 502, 503, 504) or i == 3: break
+        log(f"Betby {r.status_code}, nouvel essai…"); time.sleep((5, 15, 30)[i])
+    r.raise_for_status(); return r.json()
 
 # ── Noms des marchés ─────────────────────────────────────────────────────────
 _MK: dict = {}
