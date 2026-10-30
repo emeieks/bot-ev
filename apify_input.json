@@ -1,0 +1,11 @@
+{
+    "leagues": [
+        "League of Legends",
+        "CS2",
+        "Dota 2"
+    ],
+    "listLeagues": false,
+    "oddsTiers": [
+        "standard"
+    ]
+}
